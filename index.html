@@ -1,0 +1,286 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>LED Hunter — Google Places</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 10% 0%,#dbeafe 0,transparent 28%),radial-gradient(circle at 90% 10%,#e0e7ff 0,transparent 24%),linear-gradient(135deg,#f8fafc 0%,#eef2f7 50%,#f8fafc 100%);background-attachment:fixed;color:#0f172a;font-family:Inter,Segoe UI,Arial,sans-serif}
+header{background:linear-gradient(135deg,#0b1220 0%,#172554 55%,#1e3a8a 100%);color:#fff;padding:18px 28px;display:flex;justify-content:space-between;align-items:center;box-shadow:0 8px 30px #0f172a25}.brand{display:flex;gap:12px;align-items:center}.brand>span{font-size:29px}.brand h1{margin:0;font-size:24px}.brand small{display:block;color:#bfdbfe;margin-top:2px}header small{color:#cbd5e1}
+main{max-width:1500px;margin:auto;padding:22px}.card{background:rgba(255,255,255,.94);backdrop-filter:blur(8px);border:1px solid #e2e8f0;border-radius:18px;padding:18px;margin-bottom:16px;box-shadow:0 12px 32px #0f172a10}
+.section-title{font-size:14px;font-weight:800;margin-bottom:14px}.connection{display:grid;grid-template-columns:1fr auto;gap:14px;align-items:end}
+.grid-search{display:grid;grid-template-columns:1.2fr 1fr auto;gap:12px;align-items:end}label{display:block;font-size:12px;font-weight:800;margin-bottom:6px;color:#334155}
+input,select,button{width:100%;height:42px;border:1px solid #cbd5e1;border-radius:10px;padding:0 12px;background:#fff;color:#0f172a;font-size:14px}button{background:#2563eb;color:#fff;border:0;font-weight:800;cursor:pointer;padding:0 18px;white-space:nowrap}button:hover{background:#1d4ed8}.secondary{background:#475569}.danger{background:#b91c1c}
+.connection-status{font-size:13px;font-weight:800;margin-top:9px}.ok{color:#15803d}.err{color:#b91c1c}.muted{color:#64748b}.help{font-size:12px;color:#64748b;margin-top:10px}
+.storage-status{font-size:12px;color:#64748b;margin:-6px 0 12px;padding:0 4px}.storage-status b{color:#15803d}.stats{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:16px}.stat{background:rgba(255,255,255,.94);backdrop-filter:blur(8px);border:1px solid #e2e8f0;border-radius:16px;padding:15px 17px;box-shadow:0 10px 28px #0f172a10}.stat span{font-size:12px;color:#64748b;font-weight:700}.stat b{display:block;font-size:25px;margin-top:5px}
+.toolbar{display:grid;grid-template-columns:1.3fr 1fr auto;gap:12px;align-items:end}.actions{display:flex;gap:8px;align-items:center}.actions button{width:auto}
+.table-card{padding:0;overflow:hidden}.table-head{padding:17px 18px;border-bottom:1px solid #e2e8f0;display:flex;justify-content:space-between}.table-head h2{font-size:15px;margin:0}.table-head span{font-size:12px;color:#64748b}
+.tablewrap{overflow:auto;max-height:680px}table{width:100%;border-collapse:separate;border-spacing:0;min-width:950px}th{padding:12px 15px;text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:.4px;color:#64748b;background:#f8fafc;border-bottom:1px solid #e2e8f0;position:sticky;top:0;z-index:2}td{padding:14px 15px;border-bottom:1px solid #edf2f7;font-size:13px;vertical-align:middle}tbody tr:hover td{background:#f8fbff}
+.name{font-weight:800;color:#0f172a;font-size:14px}.phone{font-weight:900;color:#0f172a;font-size:14px;white-space:nowrap}.address{color:#475569;max-width:350px;line-height:1.35}.category-pill{display:inline-block;background:#eff6ff;color:#1d4ed8;border-radius:999px;padding:6px 9px;font-size:11px;font-weight:800}
+.status-select{height:34px;min-width:180px;font-size:12px;font-weight:800}
+.status-select.status-cli{background:#dcfce7;color:#166534;border-color:#86efac}
+.status-select.status-outro{background:#fef3c7;color:#92400e;border-color:#fcd34d}
+.status-select.status-nao{background:#fff;color:#334155;border-color:#cbd5e1}
+.status-select.status-trat{background:#dbeafe;color:#1d4ed8;border-color:#93c5fd}.icon-btn{width:37px;height:37px;padding:0;border-radius:9px;display:inline-flex;align-items:center;justify-content:center;text-decoration:none;background:#f1f5f9;color:#334155;border:1px solid #e2e8f0;font-size:19px}.wa{background:#dcfce7;color:#15803d;border-color:#bbf7d0}.site{background:#eff6ff;color:#1d4ed8;border-color:#bfdbfe}.badge{display:inline-block;padding:6px 9px;border-radius:999px;font-size:10px;font-weight:900;background:#fee2e2;color:#991b1b}.empty{text-align:center;padding:40px;color:#64748b}
+.login-shell{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;background:radial-gradient(circle at 20% 10%,#dbeafe 0,transparent 32%),radial-gradient(circle at 80% 90%,#e0e7ff 0,transparent 30%),#f8fafc}.login-card{width:min(420px,100%);background:rgba(255,255,255,.96);border:1px solid #e2e8f0;border-radius:22px;padding:32px;box-shadow:0 20px 60px #0f172a18}.login-logo{text-align:center;font-size:46px}.login-card h2{text-align:center;margin:8px 0 6px;font-size:26px}.login-card p{text-align:center;color:#64748b;font-size:13px;margin:0 0 24px}.login-card label{margin-top:12px}.login-card button{margin-top:18px}.login-card .connection-status{min-height:20px;margin-top:12px;text-align:center}.login-card .ok{color:#15803d}.login-card .err{color:#b91c1c}
+@media(max-width:1050px){.grid-search,.toolbar{grid-template-columns:1fr 1fr}.stats{grid-template-columns:repeat(3,1fr)}}@media(max-width:650px){.grid-search,.toolbar,.connection,.stats{grid-template-columns:1fr}header{display:block}}
+.header-right{display:flex;align-items:center;gap:12px}.header-logout{width:auto;height:34px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);font-size:12px;padding:0 12px}.header-logout:hover{background:rgba(255,255,255,.2);box-shadow:none;transform:none}
+
+</style>
+</head>
+<body>
+<header><div class="brand"><span>🐟</span><div><h1>LED Hunter</h1><small>Google Places • Prospecção de restaurantes, bares, delivery e comida japonesa</small></div></div><div class="header-right"><small id="clock">—</small><button id="logoutBtn" class="header-logout" onclick="logoutCloud()" >Sair</button></div></header>
+
+
+
+
+<section id="loginShell" class="login-shell" style="display:none">
+  <div class="login-card">
+    <div class="login-logo">🐟</div>
+    <h2>LED Hunter</h2>
+    <p>Entre para acessar a prospecção e o banco central de leads.</p>
+    <form id="loginForm" onsubmit="loginCloud(event)">
+      <label>E-mail</label>
+      <input id="loginEmail" type="email" autocomplete="username" placeholder="seu@email.com" required>
+      <label>Senha</label>
+      <input id="loginPassword" type="password" autocomplete="current-password" placeholder="Sua senha" required>
+      <button id="loginBtn" type="submit">Entrar</button>
+      <div id="loginStatus" class="connection-status"></div>
+    </form>
+  </div>
+</section>
+
+<div id="appShell" style="display:none">
+<main>
+<section class="card">
+  <div class="section-title">Conexão com Google Places</div>
+  <div class="connection">
+    <div><label>Google Maps API Key</label><input id="apiKey" type="password" placeholder="Cole sua chave do Google Cloud"></div>
+    <button onclick="connectGoogle()">🔗 Conectar Google</button>
+  </div>
+  <div id="googleStatus" class="connection-status muted">Google não conectado.</div>
+</section>
+
+<section class="card">
+  <div class="section-title">Pesquisar leads</div>
+  <div class="grid-search">
+    <div><label>Cidade</label><input id="city" value="Belo Horizonte"></div>
+    <div><label>Finalidade</label><select id="category"><option value="Todos">Todos</option><option value="Comida japonesa">Comida japonesa</option><option value="Bares e restaurantes">Bares e restaurantes</option></select></div>
+    <button onclick="searchGoogle()">🔎 Pesquisar</button>
+  </div>
+  <div class="help">A cidade é pesquisada automaticamente em Minas Gerais, Brasil. A pesquisa combina várias consultas, elimina duplicados e remove automaticamente estabelecimentos classificados como concorrentes.</div>
+  <div id="searchStatus" class="connection-status"></div>
+</section>
+
+<div id="storageStatus" class="storage-status">💾 Salvamento dos leads: <b>navegador</b></div>
+
+<section class="stats">
+  <div class="stat"><span>Total de leads</span><b id="nTotal">0</b></div><div class="stat"><span>Sem contato</span><b id="nNao">0</b></div>
+  <div class="stat"><span>Em tratativa</span><b id="nTrat">0</b></div><div class="stat"><span>Clientes captados</span><b id="nCli">0</b></div><div class="stat"><span>Outro vendedor</span><b id="nOutro">0</b></div>
+</section>
+
+<section class="card">
+  <div class="toolbar">
+    <div><label>Filtrar nome</label><input id="filter" oninput="render()" placeholder="Digite parte do nome"></div>
+    <div><label>Status</label><select id="statusFilter" onchange="render()">
+  <option value="">Todos</option>
+  <option value="cli">Cliente captado</option>
+  <option value="outro">Cliente de outro vendedor</option>
+  <option value="nao">Sem contato</option>
+  <option value="trat">Em tratativa</option>
+</select></div>
+    <div class="actions"><button class="secondary" onclick="exportCSV()">⬇ Exportar CSV</button><button class="danger" onclick="clearLeads()">Limpar</button></div>
+  </div>
+</section>
+
+<section class="card table-card">
+  <div class="table-head"><h2>Leads encontrados</h2><span id="resultCount">0 resultados</span></div>
+  <div class="tablewrap"><table><thead><tr><th>Estabelecimento</th><th>Número</th><th>Finalidade</th><th>Endereço</th><th>Status</th><th>Ações</th></tr></thead><tbody id="tbody"><tr><td colspan="6" class="empty">Conecte o Google e faça uma pesquisa.</td></tr></tbody></table></div>
+</section>
+</main>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+// =============================
+// LED Hunter — Banco em nuvem
+// Supabase: Postgres + Auth + Realtime
+// =============================
+const SUPABASE_URL = "https://xzlxyyzdozvpetcqjmhv.supabase.co";
+const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_sB7MVLJhTmgCBvcIBznq5A_-P43B6re";
+
+let placesLib=null,googleReady=false;
+let leads=JSON.parse(localStorage.getItem("ledHunterLeads")||"[]");
+let supabase=null,cloudMode=false,realtimeChannel=null;
+const $=id=>document.getElementById(id);
+
+function isSupabaseConfigured(){
+  return SUPABASE_URL.startsWith("https://") && !SUPABASE_URL.includes("COLE_AQUI") && SUPABASE_PUBLISHABLE_KEY && !SUPABASE_PUBLISHABLE_KEY.includes("COLE_AQUI");
+}
+if(isSupabaseConfigured()) supabase=window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
+function updateStorageStatus(){const el=$("storageStatus");if(!el)return;el.innerHTML=cloudMode?"☁ Salvamento dos leads: <b>nuvem</b> • banco central sincronizado":"💾 Salvamento dos leads: <b>navegador</b> • configure o Supabase para sincronizar";}
+async function save(){
+ localStorage.setItem("ledHunterLeads",JSON.stringify(leads)); if(!supabase){updateStorageStatus();return;}
+ const {data:{user}}=await supabase.auth.getUser();
+ const rows=leads.map(l=>({place_id:l.place_id,nome:l.nome||"",telefone:l.telefone||"",website:l.website||"",endereco:l.endereco||"",categoria:l.categoria||"",cidade:l.cidade||"",status:l.status||"nao",updated_at:l.updated||new Date().toISOString(),updated_by:user?.id||null}));
+ if(rows.length){const {error}=await supabase.from("led_hunter_leads").upsert(rows,{onConflict:"place_id"});if(error)throw error;}
+ cloudMode=true;updateStorageStatus();
+}
+async function loadCloudLeads(){
+ if(!supabase){updateStorageStatus();return;}
+ const {data,error}=await supabase.from("led_hunter_leads").select("*").order("updated_at",{ascending:false});if(error)throw error;
+ leads=(data||[]).map(r=>({id:r.id,place_id:r.place_id,nome:r.nome,telefone:r.telefone||"",website:r.website||"",endereco:r.endereco||"",categoria:r.categoria||"",cidade:r.cidade||"",status:r.status||"nao",updated:r.updated_at}));
+ localStorage.setItem("ledHunterLeads",JSON.stringify(leads));cloudMode=true;updateStorageStatus();render();
+}
+function subscribeRealtime(){if(!supabase||realtimeChannel)return;realtimeChannel=supabase.channel("led-hunter-leads").on("postgres_changes",{event:"*",schema:"public",table:"led_hunter_leads"},async()=>{try{await loadCloudLeads()}catch(e){console.warn(e)}}).subscribe();}
+async function initCloud(){if(!supabase){updateStorageStatus();return;}try{await loadCloudLeads();subscribeRealtime();}catch(e){console.warn("Supabase indisponível:",e);cloudMode=false;updateStorageStatus();setMsg("loginStatus","Banco online indisponível: "+esc(e.message));}}
+
+function showLogin(message=""){
+  $("loginShell").style.display="flex";
+  $("appShell").style.display="none";
+  $("logoutBtn").style.display="none";
+  if(message) setMsg("loginStatus",message);
+}
+function showApp(){
+  $("loginShell").style.display="none";
+  $("appShell").style.display="block";
+  $("logoutBtn").style.display="inline-block";
+}
+async function loginCloud(event){
+  event.preventDefault();
+  if(!supabase){showLogin("Supabase não está configurado.");return;}
+  const email=$("loginEmail").value.trim(),password=$("loginPassword").value;
+  const btn=$("loginBtn"); btn.disabled=true; btn.textContent="Entrando..."; setMsg("loginStatus","Autenticando...");
+  const {error}=await supabase.auth.signInWithPassword({email,password});
+  btn.disabled=false; btn.textContent="Entrar";
+  if(error){setMsg("loginStatus","✕ "+esc(error.message));return;}
+  setMsg("loginStatus","✓ Login realizado.",true);
+}
+async function logoutCloud(){
+  if(!supabase)return;
+  if(realtimeChannel){await supabase.removeChannel(realtimeChannel);realtimeChannel=null;}
+  await supabase.auth.signOut();
+}
+async function initAuth(){
+  if(!supabase){showLogin("Banco online não configurado.");return;}
+  const {data,error}=await supabase.auth.getSession();
+  if(error){showLogin("✕ Erro ao verificar sessão: "+esc(error.message));return;}
+  if(data.session){showApp();await initCloud();render();}else showLogin();
+  supabase.auth.onAuthStateChange(async(_event,session)=>{
+    if(session){showApp();try{await initCloud();render();}catch(e){console.warn(e)}}
+    else{cloudMode=false;leads=[];localStorage.setItem("ledHunterLeads",JSON.stringify(leads));render();showLogin();}
+  });
+}
+
+function esc(v){return String(v??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]))}
+function setMsg(id,msg,ok=false){$(id).innerHTML=ok?'<span class="ok">'+msg+'</span>':'<span>'+msg+'</span>'}
+async function connectGoogle(){
+ const key=$("apiKey").value.trim();if(!key){setMsg("googleStatus","Informe a Google Maps API Key.");return}
+ localStorage.setItem("ledHunterGoogleKey",key);
+ try{
+  if(!window.google)await new Promise((resolve,reject)=>{const s=document.createElement("script");s.src="https://maps.googleapis.com/maps/api/js?key="+encodeURIComponent(key)+"&v=weekly";s.async=true;s.defer=true;s.onload=resolve;s.onerror=()=>reject(new Error("Não foi possível carregar a API do Google Maps."));document.head.appendChild(s)});
+  placesLib=await google.maps.importLibrary("places");googleReady=true;setMsg("googleStatus","✓ Google Places conectado. Pronto para pesquisar.",true)
+ }catch(e){googleReady=false;setMsg("googleStatus","✕ Google não conectado: "+esc(e.message))}
+}
+function city(){return ($("city").value.trim()||"Belo Horizonte")+", Minas Gerais, Brasil"}
+function queries(){
+ const c=city(),p=$("category").value;
+ if(p==="Comida japonesa")return["comida japonesa em "+c,"restaurante japonês em "+c,"sushi em "+c,"delivery japonês em "+c];
+ if(p==="Bares e restaurantes")return["restaurantes em "+c,"bares em "+c,"restaurantes de frutos do mar em "+c,"delivery de comida em "+c];
+ return["restaurantes em "+c,"restaurante japonês em "+c,"sushi em "+c,"comida japonesa em "+c,"bares em "+c,"delivery de comida em "+c,"restaurantes de frutos do mar em "+c]
+}
+async function searchOne(q){return (await placesLib.Place.searchByText({textQuery:q,fields:["id","displayName","formattedAddress","nationalPhoneNumber","websiteURI","types","businessStatus"],language:"pt-BR",region:"BR",maxResultCount:20})).places||[]}
+async function searchGoogle(){
+ if(!googleReady){await connectGoogle();if(!googleReady)return}
+ try{
+  if(supabase){try{await loadCloudLeads()}catch(e){console.warn(e)}}
+   const qs=queries(),all=new Map();
+  for(let i=0;i<qs.length;i++){setMsg("searchStatus","Pesquisando "+(i+1)+" de "+qs.length+": "+esc(qs[i])+"...");for(const p of await searchOne(qs[i]))if(p.id)all.set(p.id,p)}
+  const cat=$("category").value;
+  for(const p of all.values()){
+   try{await p.fetchFields({fields:["displayName","formattedAddress","nationalPhoneNumber","websiteURI","types"]})}catch(_){}
+    const nome=(typeof p.displayName==="string"?p.displayName:(p.displayName?.text||"")).trim();
+    const telefone=p.nationalPhoneNumber||"";
+    const norm=s=>String(s||"").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/\D/g,"");
+    const old=leads.find(x=>x.place_id===p.id)
+      ||leads.find(x=>norm(x.telefone)&&norm(x.telefone)===norm(telefone))
+      ||leads.find(x=>String(x.nome||"").trim().toLowerCase()===String(nome||"").trim().toLowerCase()&&String(nome||"").trim()!=="");
+    const preservedStatus=old?.status||"nao";
+    const obj={place_id:p.id,nome:nome||"Nome não localizado",telefone,website:p.websiteURI||"",endereco:p.formattedAddress||"",categoria:cat,cidade:$("city").value.trim(),status:preservedStatus,updated:new Date().toISOString()};
+    if(old)Object.assign(old,obj);else leads.push({...obj,id:crypto.randomUUID()})
+  }
+  save();render();$("clock").textContent="Última pesquisa: "+new Date().toLocaleString("pt-BR");setMsg("searchStatus",all.size+" estabelecimentos encontrados e consolidados.",true)
+ }catch(e){setMsg("searchStatus","✕ Erro no Google Places: "+esc(e.message))}
+}
+// Filtro interno de concorrentes: não aparece para o usuário.
+const INTERNAL_COMPETITOR_TERMS = [
+  "peixaria",
+  "peixarias",
+  "pescados",
+  "pescado",
+  "peixes",
+  "peixe fresco",
+  "distribuidora de pescados",
+  "distribuidora de peixe",
+  "distribuidora de peixes",
+  "mercado de peixe"
+];
+
+function isConc(l){
+  const text=(l.nome+" "+(l.categoria||"")+" "+(l.endereco||"")).toLowerCase();
+  return INTERNAL_COMPETITOR_TERMS.some(term=>text.includes(term));
+}
+function wa(phone){const d=String(phone||"").replace(/\D/g,"");return d?"https://wa.me/"+(d.startsWith("55")?d:"55"+d):""}
+
+// Migração de status da versão anterior: "contatado" passa para "em tratativa".
+leads.forEach(l=>{ if(l.status==="cont") l.status="trat"; });
+localStorage.setItem("ledHunterLeads",JSON.stringify(leads));
+
+function render(){
+ const f=$("filter").value.toLowerCase(),sf=$("statusFilter").value,list=leads.filter(l=>(!f||l.nome.toLowerCase().includes(f))&&(!sf||l.status===sf));$("resultCount").textContent=list.length+" resultado"+(list.length===1?"":"s");
+ $("tbody").innerHTML=list.length?list.map(l=>{const c=isConc(l),w=wa(l.telefone);return `<tr><td><div class="name">${esc(l.nome)}</div></td><td><div class="phone">${l.telefone?esc(l.telefone):"Não informado"}</div></td><td><span class="category-pill">${esc(l.categoria)}</span></td><td><div class="address">${esc(l.endereco||"Endereço não informado")}</div></td><td>${c?'<span class="badge">CONCORRENTE</span>':`<select class="status-select status-${l.status||"nao"}" onchange="setStatus('${esc(l.id)}',this.value)">
+  <option value="cli" ${l.status==="cli"?"selected":""}>Cliente captado</option>
+  <option value="outro" ${l.status==="outro"?"selected":""}>Cliente de outro vendedor</option>
+  <option value="nao" ${(!l.status||l.status==="nao")?"selected":""}>Sem contato</option>
+  <option value="trat" ${l.status==="trat"?"selected":""}>Em tratativa</option>
+</select>`}</td><td><div class="actions">${w?`<a class="icon-btn wa" href="${w}" target="_blank" rel="noopener" title="Abrir WhatsApp">◉</a>`:""}${l.website?`<a class="icon-btn site" href="${esc(l.website)}" target="_blank" rel="noopener" title="Abrir site">↗</a>`:""}</div></td></tr>`}).join(""):'<tr><td colspan="6" class="empty">Nenhum lead encontrado.</td></tr>';
+ const v=leads.filter(l=>!isConc(l));
+$("nTotal").textContent=v.length;
+$("nNao").textContent=v.filter(x=>!x.status||x.status==="nao").length;
+$("nTrat").textContent=v.filter(x=>x.status==="trat"||x.status==="cont").length;
+$("nCli").textContent=v.filter(x=>x.status==="cli").length;
+$("nOutro").textContent=v.filter(x=>x.status==="outro").length;
+}
+async function setStatus(id,s){
+  const l=leads.find(x=>x.id===id); if(!l)return;
+  l.status=s;
+  l.updated=new Date().toISOString();
+
+  if(supabase){
+    const {error}=await supabase
+      .from("led_hunter_leads")
+      .update({status:s,updated_at:l.updated,updated_by:(await supabase.auth.getUser()).data.user?.id||null})
+      .eq("place_id",l.place_id);
+    if(error){
+      setMsg("searchStatus","✕ Não foi possível salvar o status: "+esc(error.message));
+      return;
+    }
+    cloudMode=true;
+  }
+
+  localStorage.setItem("ledHunterLeads",JSON.stringify(leads));
+  updateStorageStatus();
+  render();
+}
+function clearLeads(){
+  if(!confirm("Limpar apenas a lista atual? Os leads e seus status continuarão no banco central."))return;
+  leads=[];
+  localStorage.setItem("ledHunterLeads","[]");
+  render();
+  setMsg("searchStatus","Lista limpa. O histórico de leads e status continua salvo no banco.",true);
+}
+function exportCSV(){const rows=[["Nome","Telefone","Finalidade","Endereço","Status","Website"],...leads.filter(l=>!isConc(l)).map(l=>[l.nome,l.telefone,l.categoria,l.endereco,l.status,l.website])],csv=rows.map(r=>r.map(v=>`"${String(v??"").replaceAll('"','""')}"`).join(";")).join("\n"),a=document.createElement("a");a.href=URL.createObjectURL(new Blob(["\ufeff"+csv],{type:"text/csv;charset=utf-8"}));a.download="led-hunter-leads.csv";a.click()}
+initAuth();
+</script>
+</body>
+</html>
